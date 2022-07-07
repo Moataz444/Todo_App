@@ -8,7 +8,6 @@ class ThemeController extends GetxController {
     value
         ? Get.changeTheme(ThemeData.dark())
         : Get.changeTheme(ThemeData.light());
-
     isDark = !isDark;
     box.write('isDark', isDark);
     update();
