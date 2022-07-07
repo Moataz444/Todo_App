@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
+import '../controllers/Theme_Controller.dart';
 import '../modules/archived_tasks_screen.dart';
 import '../modules/done_tasks_screen.dart';
 import '../modules/ongoing_tasks_screen.dart';
 import '../modules/settings_screen.dart';
-import '../shared/styles/colors.dart';
 
 class TodoTasks extends StatefulWidget {
-  TodoTasks({Key? key}) : super(key: key);
+  const TodoTasks({Key? key}) : super(key: key);
 
   @override
   State<TodoTasks> createState() => _TodoTasksState();
@@ -29,44 +29,47 @@ class _TodoTasksState extends State<TodoTasks> {
   ];
 
   int indx = 0;
+  // final themeController = Get.put(ThemeController());
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: clr,
-        centerTitle: true,
-        title: Text(title[indx]),
-      ),
-      body: screens[indx],
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: clr,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: indx,
-        onTap: (index) {
-          setState(() {
-            indx = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.backup_table_sharp),
-            label: 'Ongoing',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.done),
-            label: 'Done',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.archive),
-            label: 'Archived',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-      ),
-    );
+    return GetBuilder<ThemeController>(
+        // init: ThemeController(),
+        builder: (themeController) => Scaffold(
+              appBar: AppBar(
+                // backgroundColor: clr,
+                centerTitle: true,
+                title: Text(title[indx]),
+              ),
+              body: screens[indx],
+              bottomNavigationBar: BottomNavigationBar(
+                // selectedItemColor: clr,
+                type: BottomNavigationBarType.fixed,
+                currentIndex: indx,
+                onTap: (index) {
+                  setState(() {
+                    indx = index;
+                  });
+                },
+                items: const [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.backup_table_sharp),
+                    label: 'Ongoing',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.done),
+                    label: 'Done',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.archive),
+                    label: 'Archived',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.settings),
+                    label: 'Settings',
+                  ),
+                ],
+              ),
+            ));
   }
 }
