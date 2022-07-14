@@ -60,6 +60,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               border: Border.all(color: clr, width: 4)),
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<String>(
+                              borderRadius: BorderRadius.circular(15),
                               isExpanded: true,
                               iconSize: 35,
                               value: dropdownValue,
