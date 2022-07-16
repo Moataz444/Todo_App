@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todo_app/controllers/database_controller.dart';
 import '../controllers/Theme_Controller.dart';
 import '../modules/archived_tasks_screen.dart';
 import '../modules/done_tasks_screen.dart';
@@ -15,7 +16,7 @@ class TodoTasks extends StatefulWidget {
 
 class _TodoTasksState extends State<TodoTasks> {
   final List<Widget> screens = [
-    const OngoingTasksScreen(),
+    OngoingTasksScreen(),
     const DoneTasksScreen(),
     const ArchivedTasksScreen(),
     const SettingsScreen(),
@@ -29,8 +30,14 @@ class _TodoTasksState extends State<TodoTasks> {
   ];
 
   int indx = 0;
-  // final themeController = Get.put(ThemeController());
 
+  @override
+  void initState() {
+    super.initState();
+    createDatabase();
+  }
+
+  // final themeController = Get.put(ThemeController());
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ThemeController>(
