@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:todo_app/controllers/Theme_Controller.dart';
-import 'package:todo_app/shared/styles/colors.dart';
 import 'layout/todo_tasks_layout.dart';
 
 main() async {
@@ -17,14 +16,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<ThemeController>(
         init: ThemeController(),
-        builder: (val) => GetMaterialApp(
+        builder: (themeController) => GetMaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Flutter Demo',
-              theme: ThemeData(
-                  primarySwatch: clr as MaterialColor,
-                  appBarTheme: AppBarTheme(
-                    color: clr,
-                  )),
+              theme: themeController.getThemeData(),
               home: const TodoTasks(),
             ));
   }
