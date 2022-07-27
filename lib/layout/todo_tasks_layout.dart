@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/controllers/database_controller.dart';
 import '../controllers/Theme_Controller.dart';
-import '../modules/archived_tasks_screen.dart';
-import '../modules/done_tasks_screen.dart';
-import '../modules/ongoing_tasks_screen.dart';
-import '../modules/settings_screen.dart';
+import '../shared/components/constants.dart';
 
 class TodoTasks extends StatefulWidget {
   const TodoTasks({Key? key}) : super(key: key);
@@ -15,26 +12,12 @@ class TodoTasks extends StatefulWidget {
 }
 
 class _TodoTasksState extends State<TodoTasks> {
-  final List<Widget> screens = [
-    OngoingTasksScreen(),
-    const DoneTasksScreen(),
-    const ArchivedTasksScreen(),
-    const SettingsScreen(),
-  ];
-
-  final List<String> title = [
-    'Ongoing Tasks',
-    'Done Tasks',
-    'Archived Tasks',
-    'Settings',
-  ];
-
   int indx = 0;
-
+  var dbController = Get.put(DatabaseController());
   @override
   void initState() {
     super.initState();
-    createDatabase();
+    dbController.createDatabase();
   }
 
   // final themeController = Get.put(ThemeController());
