@@ -7,6 +7,54 @@ import 'package:todo_app/shared/styles/colors.dart';
 
 var dbController = Get.put(DatabaseController());
 
+Widget addTaskButton({required context}) => Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: () => showInsertDialog(context),
+        child: Row(children: const [
+          Text(
+            'Add',
+            style: TextStyle(fontSize: 20),
+          ),
+          Icon(Icons.add)
+        ]),
+      ),
+    );
+
+Widget dateTimeRow({required Map task}) => Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
+            color: clr,
+          ),
+          child: Text(
+            '${task['date']}',
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+        const SizedBox(
+          width: 10.0,
+        ),
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
+            color: clr,
+          ),
+          child: Text(
+            '${task['time']}',
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    );
+
 Widget buildTaskItem(Map task, context, int index) => Dismissible(
       key: Key(task['id'].toString()),
       background: Container(
@@ -45,7 +93,7 @@ Widget buildTaskItem(Map task, context, int index) => Dismissible(
           children: [
             Expanded(
               child: InkWell(
-                onTap: () => showMyDialog(context, task),
+                onTap: () => showTaskDialog(context, task),
                 child: Row(
                   children: [
                     CircleAvatar(
@@ -74,41 +122,7 @@ Widget buildTaskItem(Map task, context, int index) => Dismissible(
                           const SizedBox(
                             height: 5.0,
                           ),
-                          Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20)),
-                                  color: clr,
-                                ),
-                                child: Text(
-                                  '${task['date']}',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10.0,
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20)),
-                                  color: clr,
-                                ),
-                                child: Text(
-                                  '${task['time']}',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          dateTimeRow(task: task),
                         ],
                       ),
                     ),
@@ -125,11 +139,11 @@ Widget buildTaskItem(Map task, context, int index) => Dismissible(
                 //   status: 'done',
                 //   id: model['id'],
                 // );
-                showMyDialog(context, task);
+                showEditDialog(context, task);
               },
               icon: const Icon(
                 Icons.edit,
-                color: Colors.black,
+                // color: Colors.black,
               ),
             ),
           ],
@@ -153,8 +167,8 @@ Widget taskBuilder({
           // var task = tasks[index];
           // tasks.remove(tasks[oldIndex]);
           // tasks.insert(index, task);
-          print(oldIndex);
-          print(index);
+          // print(oldIndex);
+          // print(index);
 
           dbController.updateDataToDB(
               id: tasks[index]['id'],
@@ -191,13 +205,13 @@ Widget taskBuilder({
                   time: tasks[ind + 1]['time'],
                   status: tasks[ind + 1]['status'],
                   details: tasks[ind + 1]['details']);
-              print(ind);
+              // print(ind);
             }
           }
           dbController.getDataFromDB(dbController.db);
 
           // print(task);
-          print(tasks.length);
+          // print(tasks.length);
         },
         itemBuilder: (context, index) {
           return buildTaskItem(tasks[index], context, index);

@@ -7,14 +7,14 @@ import '../../modules/ongoing_tasks_screen.dart';
 import '../../modules/settings_screen.dart';
 
 final List<Widget> screens = [
-  const OngoingTasksScreen(),
+  const NewTasksScreen(),
   const DoneTasksScreen(),
   const ArchivedTasksScreen(),
   const SettingsScreen(),
 ];
 
 final List<String> title = [
-  'Ongoing Tasks',
+  'New Tasks',
   'Done Tasks',
   'Archived Tasks',
   'Settings',
