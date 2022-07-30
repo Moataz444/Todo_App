@@ -1,17 +1,131 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todo_app/shared/components/components.dart';
+import '../controllers/database_controller.dart';
+import '../shared/components/alert_dialog_componnets.dart';
 
-// class MyAlert extends StatelessWidget {
-//   const MyAlert({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return ;
-//   }
-// }
-//
+Future<void> showEditDialog(context, Map task) async {
+  TextEditingController titleController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
+  TextEditingController detailsController = TextEditingController();
 
-Future<void> showMyDialog(context, Map task) async {
+  statusController = task['status'];
+  // final formKey = GlobalKey<FormState>();
+
+  titleController.text = task['title'];
+  dateController.text = task['date'];
+  timeController.text = task['time'];
+  detailsController.text = task['details'];
+  return
+      // Scaffold(
+      // body: ,
+      // )
+      showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return GetBuilder<DatabaseController>(
+        init: DatabaseController(),
+        builder: (databaseController) => AlertDialog(
+          title: const Text('Edit Task',
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          content: editAndInsertAlertDialogContent(
+            // statusController: statusCont,
+            // formKey: formKey,
+            context: context,
+            dateController: dateController,
+            detailsController: detailsController,
+            timeController: timeController,
+            titleController: titleController,
+          ),
+          actions: alertActions(
+              onPressed: () {
+                final isValid = formKey.currentState?.validate();
+                bool isSameTable =
+                    statusController == task['status'] ? true : false;
+                // if (isSameTable) print('sametableee');
+                if (isValid!) {
+                  databaseController.updateDataToDB(
+                    isSameTable: isSameTable,
+                    oldStatus: task['status'],
+                    title: titleController.text,
+                    id: task['id'],
+                    date: dateController.text,
+                    time: timeController.text,
+                    status: statusController,
+                    details: detailsController.text,
+                  );
+                  Get.back();
+                }
+              },
+              confirmText: 'Ok',
+              titleController: titleController,
+              dateController: dateController,
+              timeController: timeController,
+              detailsController: detailsController,
+              context: context),
+        ),
+      );
+    },
+  );
+}
+
+Future<void> showInsertDialog(context) async {
+  TextEditingController titleController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
+  TextEditingController detailsController = TextEditingController();
+
+  statusController = 'new';
+
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return GetBuilder<DatabaseController>(
+        init: DatabaseController(),
+        builder: (databaseController) => AlertDialog(
+          title: const Text('Add Task',
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          content: editAndInsertAlertDialogContent(
+            // statusController: statusCont,
+            // formKey: formKey,
+            context: context,
+            dateController: dateController,
+            detailsController: detailsController,
+            timeController: timeController,
+            titleController: titleController,
+          ),
+          actions: alertActions(
+              onPressed: () {
+                final isValid = formKey.currentState?.validate();
+                if (isValid!) {
+                  databaseController.insertDatabase(
+                    title: titleController.text,
+                    date: dateController.text,
+                    time: timeController.text,
+                    status: statusController,
+                    details: detailsController.text,
+                  );
+                  databaseController.getDataFromDB(databaseController.db);
+
+                  Get.back();
+                }
+              },
+              confirmText: 'Ok',
+              titleController: titleController,
+              dateController: dateController,
+              timeController: timeController,
+              detailsController: detailsController,
+              context: context),
+        ),
+      );
+    },
+  );
+}
+
+Future<void> showTaskDialog(context, Map task) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
@@ -19,28 +133,46 @@ Future<void> showMyDialog(context, Map task) async {
       return AlertDialog(
         title: Text(task['title'],
             style: const TextStyle(fontWeight: FontWeight.bold)),
-        content: SingleChildScrollView(child: Text(task['details'])),
-        actions: <Widget>[
-          Row(
+        content: SingleChildScrollView(
+          child: Column(
             children: [
-              Expanded(
-                child: TextButton(
-                  child: const Text('Cancel'),
-                  onPressed: () {
-                    Get.back();
-                  },
-                ),
+              const SizedBox(
+                height: 5,
               ),
-              const Spacer(),
-              Expanded(
-                child: TextButton(
-                  child: const Text('Edit'),
-                  onPressed: () {
-                    Get.back();
-                  },
-                ),
+              dateTimeRow(task: task),
+              const SizedBox(
+                height: 15,
               ),
+              task['details'] != ''
+                  ? Container(
+                      alignment: Alignment.topLeft,
+                      child: Column(
+                        children: [
+                          const Text(
+                            'Details',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            task['details'],
+                          ),
+                        ],
+                      ),
+                    )
+                  : const SizedBox(),
             ],
+          ),
+        ),
+        actions: <Widget>[
+          Center(
+            child: TextButton(
+              child: const Text('Ok'),
+              onPressed: () {
+                Get.back();
+              },
+            ),
           ),
         ],
       );

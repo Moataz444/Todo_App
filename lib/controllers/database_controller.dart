@@ -5,7 +5,7 @@ List<Map> ongoingTasks = [];
 List<Map> doneTasks = [];
 List<Map> archivedTasks = [];
 Map tasksDB = {
-  'new': 'OngoingTasks',
+  'new': 'NewTasks',
   'done': 'DoneTasks',
   'archived': 'ArchivedTasks',
 };
@@ -21,7 +21,7 @@ class DatabaseController extends GetxController {
       print('db created');
       await db
           .execute(
-              'CREATE TABLE OngoingTasks (id INTEGER PRIMARY KEY, title TEXT, date TEXT,time TEXT, status TEXT, details TEXT)')
+              'CREATE TABLE NewTasks (id INTEGER PRIMARY KEY, title TEXT, date TEXT,time TEXT, status TEXT, details TEXT)')
           .then((value) => print('OngoingTasks table created successfully'))
           .catchError((onError) => print(
               'error when creating OngoingTasks table: ${onError.toString()}'));
@@ -91,19 +91,33 @@ class DatabaseController extends GetxController {
     // print(tasks);
   }
 
-  void updateDataToDB(
-      {required String title,
-      required int id,
-      required String date,
-      required String time,
-      required String status,
-      required String details}) async {
-    await db?.rawUpdate(
-        'UPDATE ${tasksDB[status]} SET title = ?, date = ?, time = ?,status = ?,details = ? WHERE id = ?',
-        ['$title', '$date', '$time', '$status', '$details', id]).then((value) {
-      print('updated successfully');
-      update();
-    });
+  void updateDataToDB({
+    bool isSameTable = true,
+    String oldStatus = '',
+    required String title,
+    required int id,
+    required String date,
+    required String time,
+    required String status,
+    required String details,
+  }) async {
+    if (isSameTable) {
+      await db?.rawUpdate(
+          'UPDATE ${tasksDB[status]} SET title = ?, date = ?, time = ?,status = ?,details = ? WHERE id = ?',
+          [title, date, time, status, details, id]).then((value) {
+        print('updated successfully');
+        // update();
+      });
+    } else {
+      insertDatabase(
+          details: details,
+          status: status,
+          title: title,
+          date: date,
+          time: time);
+      deleteFromDB(id: id, status: oldStatus);
+    }
+    getDataFromDB(db);
   }
 
   void deleteFromDB({

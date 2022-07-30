@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/controllers/database_controller.dart';
+import 'package:todo_app/shared/components/components.dart';
 import '../controllers/Theme_Controller.dart';
 import '../shared/components/constants.dart';
 
@@ -14,6 +15,7 @@ class TodoTasks extends StatefulWidget {
 class _TodoTasksState extends State<TodoTasks> {
   int indx = 0;
   var dbController = Get.put(DatabaseController());
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +32,10 @@ class _TodoTasksState extends State<TodoTasks> {
                 // backgroundColor: clr,
                 centerTitle: true,
                 title: Text(title[indx]),
+                actions: [
+                  if (title[indx] != 'Settings')
+                    addTaskButton(context: context),
+                ],
               ),
               body: screens[indx],
               bottomNavigationBar: BottomNavigationBar(
