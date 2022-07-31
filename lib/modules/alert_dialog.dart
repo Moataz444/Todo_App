@@ -57,6 +57,7 @@ Future<void> showEditDialog(context, Map task) async {
                     details: detailsController.text,
                   );
                   Get.back();
+                  toaster('Task updated successfully');
                 }
               },
               confirmText: 'Ok',
@@ -111,6 +112,7 @@ Future<void> showInsertDialog(context) async {
                   databaseController.getDataFromDB(databaseController.db);
 
                   Get.back();
+                  toaster('Task added successfully');
                 }
               },
               confirmText: 'Ok',

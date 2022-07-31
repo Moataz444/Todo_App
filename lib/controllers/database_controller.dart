@@ -43,26 +43,6 @@ class DatabaseController extends GetxController {
     });
   }
 
-  Future<void> insertDatabase({
-    required String details,
-    required String status,
-    required String title,
-    required String date,
-    required String time,
-  }) async {
-    return await db?.transaction((txn) async {
-      txn
-          .rawInsert(
-              'INSERT INTO ${tasksDB[status]}(title, date, time, status, details) VALUES("$title", "$date", "$time", "$status", "$details")')
-          .then((value) {
-        print(
-            'inserted successfully: "$title", "$date", "$time", "$status", "$details" ');
-        update();
-      }).catchError((onError) =>
-              print('error when inserting: ${onError.toString()}'));
-    });
-  }
-
   Future<List<Map>> getDataFromDB(db) async {
     ongoingTasks = [];
     doneTasks = [];
@@ -91,6 +71,28 @@ class DatabaseController extends GetxController {
     // print(tasks);
   }
 
+  Future<void> insertDatabase({
+    required String details,
+    required String status,
+    required String title,
+    required String date,
+    required String time,
+  }) async {
+    return await db?.transaction((txn) async {
+      txn
+          .rawInsert(
+              'INSERT INTO ${tasksDB[status]}(title, date, time, status, details) VALUES("$title", "$date", "$time", "$status", "$details")')
+          .then((value) {
+        print(
+            'inserted successfully: "$title", "$date", "$time", "$status", "$details" ');
+        // toaster('Task inserted successfully');
+
+        update();
+      }).catchError((onError) =>
+              print('error when inserting: ${onError.toString()}'));
+    });
+  }
+
   void updateDataToDB({
     bool isSameTable = true,
     String oldStatus = '',
@@ -117,6 +119,8 @@ class DatabaseController extends GetxController {
           time: time);
       deleteFromDB(id: id, status: oldStatus);
     }
+    // toaster('Task updated successfully');
+
     getDataFromDB(db);
   }
 
@@ -127,6 +131,7 @@ class DatabaseController extends GetxController {
     db?.rawDelete('DELETE FROM ${tasksDB[status]} WHERE id = ?', [id]).then(
         (value) {
       print('deleted successfully');
+      // toaster('Task deleted successfully');
       update();
     });
   }
