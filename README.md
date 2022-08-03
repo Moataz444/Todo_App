@@ -1,16 +1,15 @@
 # todo_app
 
-A new Flutter project.
+A Flutter project with changeable themes and dark, used mode to manage tasks using:
 
-## Getting Started
+-GetX state management
+-sqflite database with 3 tables(new tasks, done tasks, archived tasks)
+-CRUD operations on database
+-reoderable listview
+-dissmissble task to delete
+-write task title
+-write task details
+-date picker
+-time picker
+-drop down menu to select/change table
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
