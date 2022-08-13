@@ -1,23 +1,42 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:todo_app/controllers/database_controller.dart';
 import 'package:todo_app/modules/alert_dialog.dart';
 import 'package:todo_app/shared/styles/colors.dart';
 
 var dbController = Get.put(DatabaseController());
+// FToast toast = FToast();
+toaster(String msg) {
+  // toast.removeQueuedCustomToasts();
+  Fluttertoast.cancel();
+  return Fluttertoast.showToast(
+      msg: msg,
+// toastLength: Toast.LENGTH_SHORT,
+// gravity: ToastGravity.CENTER,
+// timeInSecForIosWeb: 1,
+      backgroundColor: clr.withOpacity(0.95),
+      textColor: Colors.white,
+      fontSize: 16.0);
+}
 
 Widget addTaskButton({required context}) => Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
         onTap: () => showInsertDialog(context),
-        child: Row(children: const [
-          Text(
-            'Add',
-            style: TextStyle(fontSize: 20),
-          ),
-          Icon(Icons.add)
-        ]),
+        child: SizedBox(
+          width: 80,
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
+            Text(
+              'Add',
+              style: TextStyle(fontSize: 20),
+            ),
+            Icon(Icons.add)
+          ]),
+        ),
       ),
     );
 
@@ -153,6 +172,7 @@ Widget buildTaskItem(Map task, context, int index) => Dismissible(
         ongoingTasks.remove(task);
         dbController.deleteFromDB(id: task['id'], status: task['status']);
         dbController.getDataFromDB(dbController.db);
+        toaster('Task deleted successfully');
       },
     );
 
