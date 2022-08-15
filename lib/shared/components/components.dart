@@ -116,9 +116,11 @@ Widget buildTaskItem(Map task, context, int index) => Dismissible(
                 child: Row(
                   children: [
                     CircleAvatar(
+                      backgroundColor: clr.withOpacity(0.9),
                       radius: 20.0,
                       child: Text(
                         '${++index}',
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                     const SizedBox(
